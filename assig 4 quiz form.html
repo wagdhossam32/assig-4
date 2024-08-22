@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Quiz Form Creation</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <app-root>Loading...</app-root>
+
+    <!-- Angular core scripts -->
+    <script src="runtime.js" defer></script>
+    <script src="polyfills.js" defer></script>
+    <script src="styles.js" defer></script>
+    <script src="vendor.js" defer></script>
+    <script src="main.js" defer></script>
+
+    <script>
+        //////////////akher assig.
+    
+        //// Import Angular core modules talet mara
+        const { NgModule, Component } = ng.core;
+        const { BrowserModule } = ng.platformBrowser;
+        const { FormsModule } = ng.forms;
+
+        ////Define QuizOption class
+        class QuizOption {
+            constructor(public optionText: string) { }
+        }
+
+        //////Define QuizQuestion class
+        class QuizQuestion {
+            constructor(public questionText: string, public options: QuizOption[] = []) { }
+        }
+
+        //////Define AppComponent tany
+        @Component({
+            selector: 'app-root',
+            template: `
+        <div class="container">
+          <h1>Create a Quiz</h1>
+          <div>
+            <input [(ngModel)]="newQuestionText" placeholder="Enter your question" />
+            <button (click)="addQuestion()">Add Question</button>
+          </div>
+          <div *ngFor="let question of quizQuestions">
+            <h3>{{ question.questionText }}</h3>
+            <ul>
+              <li *ngFor="let option of question.options">
+                <input type="text" [(ngModel)]="option.optionText" placeholder="Option text" />
+                <button (click)="removeOption(question, option)">Remove Option</button>
+              </li>
+            </ul>
+            <input [(ngModel)]="newOptionText" placeholder="Add an option" />
+            <button (click)="addOption(question)">Add Option</button>
+          </div>
+        </div>
+      `,
+            styles: [`
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; }
+        h3 { margin-top: 20px; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 5px 0; }
+      `]
+        })
+        class AppComponent {
+            newQuestionText = '';
+            newOptionText = '';
+            quizQuestions: QuizQuestion[] = [];
+
+            addQuestion() {
+                if (this.newQuestionText.trim()) {
+                    this.quizQuestions.push(new QuizQuestion(this.newQuestionText.trim()));
+                    this.newQuestionText = '';
+                }
+            }
+
+            addOption(question: QuizQuestion) {
+                if (this.newOptionText.trim()) {
+                    question.options.push(new QuizOption(this.newOptionText.trim()));
+                    this.newOptionText = '';
+                }
+            }
+
+            removeOption(question: QuizQuestion, option: QuizOption) {
+                question.options = question.options.filter(opt => opt !== option);
+            }
+        }
+
+    /////Define AppModule talet bardoo
+        @NgModule({
+            declarations: [AppComponent],
+            imports: [BrowserModule, FormsModule],
+            bootstrap: [AppComponent]
+        })
+        class AppModule { }
+
+        // Bootstrap the application 
+        ng.platformBrowserDynamic.bootstrapModule(AppModule)
+            .catch(err => console.error(err));
+            ////////////////////////////////////////////////////////////////////
+            /////////thankyouuuuuuuuuuuu 
+    </script>
+</body>
+
+</html>

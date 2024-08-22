@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Single Page App</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <app-root>Loading...</app-root>
+
+    <!-- Angular core scripts -->
+    <script src="runtime.js" defer></script>
+    <script src="polyfills.js" defer></script>
+    <script src="styles.js" defer></script>
+    <script src="vendor.js" defer></script>
+    <script src="main.js" defer></script>
+
+    <script>
+        /////////Import Angular core modules awel mara
+        const { NgModule, Component } = ng.core;
+        const { BrowserModule } = ng.platformBrowser;
+        const { RouterModule, Routes } = ng.router;
+
+        /////////////Define Home component
+        @Component({
+            selector: 'app-home',
+            template: '<h2>Home Component</h2><p>Welcome to the home page!</p>'
+        })
+        class HomeComponent { }
+
+        //..Define About component
+        @Component({
+            selector: 'app-about',
+            template: '<h2>About Component</h2><p>This is the about page.</p>'
+        })
+        class AboutComponent { }
+
+        //..Define routes
+        const routes = [
+            { path: '', component: HomeComponent },
+            { path: 'about', component: AboutComponent }
+        ];
+
+        ///Define AppModule
+        @NgModule({
+            declarations: [HomeComponent, AboutComponent],
+            imports: [BrowserModule, RouterModule.forRoot(routes)],
+            bootstrap: [ng.platformBrowserDynamic.bootstrapComponent('app-root')]
+        })
+        class AppModule { }
+
+///////////////Define main App component
+        @Component({
+            selector: 'app-root',
+            template: `
+        <h1>Angular Single Page Application</h1>
+        <nav>
+          <a routerLink="/">Home</a>
+          <a routerLink="/about">About</a>
+        </nav>
+        <router-outlet></router-outlet>
+      `
+        })
+        class AppComponent { }
+
+        // Bootstrap ..............
+        ng.platformBrowserDynamic.bootstrapModule(AppModule)
+            .catch(err => console.error(err));
+    </script>
+</body>
+
+</html>

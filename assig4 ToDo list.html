@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>To-Do List Application</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <app-root>Loading...</app-root>
+
+    <!-- Angular core scripts -->
+    <script src="runtime.js" defer></script>
+    <script src="polyfills.js" defer></script>
+    <script src="styles.js" defer></script>
+    <script src="vendor.js" defer></script>
+    <script src="main.js" defer></script>
+
+    <script>
+        ///////////--Import Angular core modules
+        const { NgModule, Component } = ng.core;
+        const { BrowserModule } = ng.platformBrowser;
+        const { FormsModule } = ng.forms;
+
+        /////////define ToDoItem class
+        class ToDoItem {
+            constructor(public task: string, public completed: boolean = false) { }
+        }
+
+        // Define AppComponent
+        @Component({
+            selector: 'app-root',
+            template: `
+        <div class="container">
+          <h1>To-Do List</h1>
+          <input [(ngModel)]="newTask" placeholder="Add a new task" />
+          <button (click)="addTask()">Add Task</button>
+          <ul>
+            <li *ngFor="let item of todoList">
+              <input type="checkbox" [(ngModel)]="item.completed" />
+              <span [ngClass]="{'completed': item.completed}">{{ item.task }}</span>
+              <button (click)="removeTask(item)">Remove</button>
+            </li>
+          </ul>
+        </div>
+      `,
+            styles: [`
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 10px 0; }
+        .completed { text-decoration: line-through; }
+      `]
+        })
+        class AppComponent {
+            newTask = '';
+            todoList: ToDoItem[] = [];
+
+            addTask() {
+                if (this.newTask.trim()) {
+                    this.todoList.push(new ToDoItem(this.newTask.trim()));
+                    this.newTask = '';
+                }
+            }
+
+            removeTask(item: ToDoItem) {
+                this.todoList = this.todoList.filter(todo => todo !== item);
+            }
+        }
+
+        //.Define App Module
+        @NgModule({
+            declarations: [AppComponent],
+            imports: [BrowserModule, FormsModule],
+            bootstrap: [AppComponent]
+        })
+        class AppModule { }
+
+        // Bootstrap the application
+        ng.platformBrowserDynamic.bootstrapModule(AppModule)
+            .catch(err => console.error(err));
+    </script>
+</body>
+
+</html>
