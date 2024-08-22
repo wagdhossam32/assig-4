@@ -1,0 +1,14 @@
+<h2>Create a Quiz</h2>
+<div>
+  <label>Question:</label>
+  <input [(ngModel)]="questionText">
+</div>
+<div *ngFor="answer">
+  <label>Answer :</label>
+  <input [(ngModel)]="answer">
+</div>
+<div>
+  <label>Correct Answer:</label>
+  <input [(ngModel)]="correctAnswer">
+</div>
+<button (click)="addQn()">Add the Q</button>
